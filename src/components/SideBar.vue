@@ -32,7 +32,7 @@
                         Cartographie
                     </router-link>
                 </li>
-                <li>
+           <!--      <li>
                     <router-link to="/Sign-up" class="navlinks">
                         <span>
                             <calendarVue />
@@ -55,7 +55,7 @@
                         </span>
                         Récompenses
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

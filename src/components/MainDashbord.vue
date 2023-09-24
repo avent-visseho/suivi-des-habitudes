@@ -3,7 +3,7 @@
         <div class="card_box">
             <div class="content_card_box">
                 <div class="habitNumber_box">
-                    <span>25</span>
+                    <span>{{ habitudes.length }}</span>
                 </div>
                 <div class="habitText_box">
                     <span>Habitudes</span>
@@ -13,7 +13,7 @@
         <div class="card_box">
             <div class="content_card_box">
                 <div class="habitNumber_box">
-                    <span>15</span>
+                    <span>{{ dones.length }}</span>
                 </div>
                 <div class="habitText_box">
                     <span>Done</span>
@@ -23,7 +23,7 @@
         <div class="card_box">
             <div class="content_card_box">
                 <div class="habitNumber_box">
-                    <span>10</span>
+                    <span>{{ stills.length }}</span>
                 </div>
                 <div class="habitText_box">
                     <span>Not Done</span>
@@ -34,10 +34,10 @@
             <TableHabit />
         </div>
         <div class="card_box">
-            <radial-progress-bar :diameter="200" :completed-steps="completedSteps" :total-steps="totalSteps ">
+            <radial-progress-bar :diameter="200" :completed-steps="dones.length" :total-steps="habitudes.length ">
                 <!-- Your inner content here -->
-                completedSteps  <br>
-                {{ completedSteps }} / {{ totalSteps }}
+                completed <br>
+                {{ dones.length }} / {{ habitudes.length  }}
             </radial-progress-bar>
 
         </div>
@@ -52,9 +52,30 @@ import TableHabit from '@/components/TableHabit.vue'
 console.log(numberHabitudes); */
 import RadialProgressBar from "vue3-radial-progress";
 import { ref } from "vue";
-const completedSteps = ref(15);
-const totalSteps = ref(25);
-</script>
+const completedSteps = ref();
+const totalSteps = ref();
+import {storeToRefs} from "pinia"
+    const {habitudes} = storeToRefs(useHabitudeStore())
+    import {useHabitudeStore} from '@/stores/habitudes'
+    const {initialise} = useHabitudeStore()
+    import { onMounted } from "vue";
+    onMounted(async () =>{
+        await initialise()
+        stats()
+    })
+     const dones = ref([]);
+const stills = ref([]) 
+
+function stats(){
+  console.log("habitudes",habitudes) 
+  habitudes.value.map(e=> {
+    if(e.status == false) stills.value.push(e);
+    if(e.status == true) dones.value.push(e)
+  })
+}
+    
+    </script>
+
 
 <style>
 .main {

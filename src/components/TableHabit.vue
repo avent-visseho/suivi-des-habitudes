@@ -12,12 +12,15 @@
                 </tr>
                 
                 <tr v-for="element in habitudes">
-                    <td><input type="checkbox"></td>
-                    <td>{{ element.id_Habitude }}</td>
-                    <td>{{ element.Nom_habitude }}</td>
-                    <td>{{ element.Description_habitude }}</td>
-                    <td>{{ element.Frequence }}</td>
-                    <td>{{ element.Heure }}</td>
+                    <td><input type="checkbox" v-model="element.status" @input="changestatus({
+                        id:element.id,
+                        status:element.status
+                    })"></td>
+                    <td>{{ element.id}}</td>
+                    <td>{{ element.nom_habitude }}</td>
+                    <td>{{ element.description }}</td>
+                    <td>{{ element.frequence }}</td>
+                    <td>{{ element.heure_execution }}</td>
                 </tr>
             </table>
         </div>
@@ -25,14 +28,43 @@
 </template>
 
 <script setup lang="ts">
+import {ref} from "vue"
+
     import {storeToRefs} from "pinia"
+    import JSConfetti from 'js-confetti'
     const {habitudes} = storeToRefs(useHabitudeStore())
     import {useHabitudeStore} from '@/stores/habitudes'
-    const {initialise} = useHabitudeStore()
-    import { onUnmounted } from "vue";
-    onUnmounted(async () =>{
+    const {initialise,updateDataInSupabase} = useHabitudeStore()
+    import { onMounted } from "vue";
+    onMounted(async () =>{
         await initialise()
     })
+let  updatedData =  ref({
+    id:0,
+    status:null
+})
+async function changestatus(staus:any){
+ console.log("updatedDataSttttttttttttttttttttttttatus",staus.status) 
+     updatedData.value.id = staus.id,
+         updatedData.value.status = staus.status
+    
+         console.log("updatedData",updatedData) 
+    await updateDataInSupabase(updatedData)
+
+if(staus.status == false ){
+    console.log("status",staus)
+    showConfetti()
+}
+
+}
+
+const confetti = new JSConfetti()
+
+function showConfetti() {
+  confetti.addConfetti()
+}
+
+
 </script>
 
 <style scoped>

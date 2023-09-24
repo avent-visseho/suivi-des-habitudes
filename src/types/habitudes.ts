@@ -1,8 +1,8 @@
 export type Habitude = {
-    id_Habitude? : number,
-    id_Utilisateur? : number,
-    Nom_habitude : string,
-    Description_habitude : string,
-    Frequence : string,
-    Heure : TimeRanges
+    id? : number,
+    nom_habitude : string,
+    description : string,
+    frequence : string,
+    heure_execution : string,
+    status:boolean
 }
